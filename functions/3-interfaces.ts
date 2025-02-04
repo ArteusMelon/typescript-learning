@@ -7,6 +7,9 @@
  * - address
  */
 interface Contact {
+    id:number,
+    name:string,
+    address:string
 }
 
 /**
@@ -15,7 +18,8 @@ interface Contact {
  * @param contact Le contact à traiter
  * @returns l'adress du contact
  */
-export function getAddress(): void {
+export function getAddress(contact:Contact): string {
+    return contact.address;
 }
 
 /**
@@ -24,7 +28,12 @@ export function getAddress(): void {
  * @param friends La liste de contact concernée
  * @returns Le nombre d'amis
  */
-export function howManyFriends(): void {
+export function howManyFriends(friends:Contact[]): number {
+    let som=0;
+    friends.forEach(element => {
+        som+=1;        
+    });
+    return som;
 }
 
 /**
@@ -34,7 +43,9 @@ export function howManyFriends(): void {
  * @param contacts Tableau de contacts à traiter 
  * @returns Une adresse ou "null"
  */
-export function findTheBat(): void {
+export function findTheBat(contacts:Contact[]): string|null {
+    const batman = contacts.find(element => element.name == "Batman");
+    return batman ? batman.address : null;
 }
 
 // ----------- CLEF OPTIONNELLES -----------
@@ -51,7 +62,21 @@ export function findTheBat(): void {
  * - picture : url vers une image (optionnel)
  * - email : email de l'utilisateur (optionnel)
  */
-interface User {
+interface UserI {
+    name:string,
+    verified:boolean,
+    address?:string,
+    picture?:string,
+    email?:string
+
+}
+
+class User implements UserI{
+    name!: string;
+    verified: boolean=false;
+    address?: string | undefined;
+    picture?: string | undefined;
+    email?: string | undefined;
 }
 
 /**
@@ -60,7 +85,10 @@ interface User {
  * @param name Le nom de l'utilisateur
  * @returns Nouvel objet "User"
  */
-export function generateNewUser(): void {
+export function generateNewUser(name:string): User {
+    let user= new User();
+    user.name=name
+    return user;
 }
 
 /**
@@ -78,7 +106,11 @@ export function generateNewUser(): void {
  * @param email Nouvel email en chaîne de caractères
  * @returns Nouvel objet "User" avec les informations à jour
  */
-export function verifyUser(): void {
+export function verifyUser(user:User, email:string): User {
+   user = new User();
+   user.email=email;
+   user.verified=true;
+   return user;
 }
 
 
@@ -89,7 +121,10 @@ export function verifyUser(): void {
  * @param pictureUrl L'URL vers la photo de l'utilisateur
  * @returns Nouvel objet "User" avec les informations à jour
  */
-export function updateUserPhoto(): void {
+export function updateUserPhoto(user:User, pictureUrl:string): User {
+    user=new User();
+    user.picture=pictureUrl;
+    return user;
 }
 
 
@@ -101,7 +136,11 @@ export function updateUserPhoto(): void {
  * @param user L'objet "User" concerné par l'opération
  * @returns La chaîne de caractères attendue
  */
-export function getUserPhoto(): void {
+export function getUserPhoto(user:User): string {
+    if(user.picture!=null){
+        return user.picture;
+    }
+    return "https://place.dog/300/200";
 }
 
 /**
@@ -116,5 +155,11 @@ export function getUserPhoto(): void {
  * @param users Le Json comprenant plusieurs objets "User"
  * @returns L'objet "User" retrouvé ou "null" si aucun utilisateur associé à la clef
  */
-export function getUser(): void {
+export function getUser(id:number, users:User[]): User|null {
+    for(const [key, value] of Object.entries(users)){
+        if(value.){
+            return value;
+        }
+    }
+    return null;
 }
